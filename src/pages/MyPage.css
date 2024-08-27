@@ -1,0 +1,45 @@
+.mypage {
+    display: flex;
+    margin-top: 120px;
+    height: 1200px;
+    width: 100%;        /* 부모 요소의 너비를 설정 */
+    backdrop-filter: blur(5px);
+}
+
+.mypage-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%;
+}
+.user-name {
+margin-bottom: 50px;
+}
+
+.mypage-tb {
+    width: 60%;
+    height: 200px;
+    background-color: #333; /* 시각적으로 확인할 수 있도록 배경색 추가 */
+    padding: 20px;      /* 내용 확인을 위해 약간의 패딩 추가 */
+
+}
+
+.mypage-tb th {
+    color: white; /* 글자색을 흰색으로 설정 */
+    text-align: center;
+}
+
+/* 회원정보 수정영역 */
+
+.update-section {
+    margin-top: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center; 
+    width: 100%;
+}
+
+.update-headline {
+    border-bottom: solid 2px #333;
+    width: 60%;
+}

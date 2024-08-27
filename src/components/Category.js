@@ -6,7 +6,7 @@ const Category = () => {
    return (
         <div className='category'>
             <div className='category-list'>
-                    <div className='category-tap'><Link to="/ProductALL">TEST</Link></div>
+                    <div className='category-tap'>Best</div>
                     <div className='category-tap'>Women
                     <ul className='dropdown'>
                         <li className='dropdown-item'>All</li>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 //import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar'; 
-import './pages.css';
+import './MyPage.css';
 
 
 const MyPage = () => {
@@ -19,13 +19,11 @@ useEffect(() => {
         headers: { Authorization: sessionStorage.getItem('accessToken'),
         },
       }); 
-     // console.log(response.data);
-      //console.log(response.data.data);
-
+     
 
       if (response.data && response.data.data) {
-        const { name, loginId, grade } = response.data.data;
-        setUserInfo({ name, loginId, grade }); // 사용자 정보 상태 업데이트
+        const { name, loginId, grade, phone } = response.data.data;
+        setUserInfo({ name, loginId, grade, phone }); // 사용자 정보 상태 업데이트
       } else {
         setError("No data found"); // 데이터가 없을 때 에러 메시지 설정
       }
@@ -48,9 +46,10 @@ if (!userInfo) {
 
   return (
       <div className='mypage'>
-      <h1 className='headline'>{userInfo.name}님 환영합니다.</h1>
-      <Sidebar />
-        <table className='mypage-tb'>
+         <Sidebar />
+         <div className='mypage-section'>
+         <h1 className='user-name'>{userInfo.name}님 환영합니다.</h1>
+         <table className='mypage-tb'>
           <thead>
             <tr>
           <th>{userInfo.loginId}</th>
@@ -58,8 +57,21 @@ if (!userInfo) {
           </tr>
           </thead>
         </table>
-       <div className='correction'>
-        <h1>회원정보 수정</h1>
+       <div className='update-section'>
+        <h3 className='update-headline'>회원정보 수정</h3>
+        <label>이름 변경</label>
+        <input value={userInfo.name}/>
+        <label>연락처 변경</label>
+        <input value={userInfo.phone}/>
+        <button>이메일 인증으로 정보 수정</button>
+        <button>비밀번호 재설정</button>
+        <label>새비밀번호</label>
+        <input placeholder='새 비밀번호입력' />
+        <label>새비밀번호 확인</label>
+        <input placeholder='새 비밀번호 확인' />
+        <button>등록완료</button>
+        </div>
+        <span>탈퇴하기</span>
        </div>
       </div>
   );

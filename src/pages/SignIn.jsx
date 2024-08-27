@@ -1,8 +1,10 @@
 // 경로 : src/pages/SignIn.js
-import React, { useState,useNavigate } from 'react';
-import './pages.css';
+import React, { useState } from 'react';
+import './SignIn.css';
 import axios from 'axios'; // axios를 불러옵니다.
-//import { Link } from 'react-router-dom'; // react-router-dom의 Link를 불러옵니다.
+import { Link } from 'react-router-dom';
+
+
 
 
 
@@ -77,7 +79,7 @@ console.log(response.data.data); // 받은 토큰이 {date: token} 형식임..
             로그인
             </button>   
             <hr className="custom-line"/>
-            <button className='signup-btn'>회원가입</button>
+           <Link to='/SignUp'><button className='signup-btn'>회원가입</button></Link> 
         </form>
     </div>
 

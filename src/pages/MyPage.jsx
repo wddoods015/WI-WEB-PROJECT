@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Sidebar from '../components/Sidebar'; 
 import './MyPage.css';
+import { Link } from 'react-router-dom';
 
 
 const MyPage = () => {
@@ -52,28 +53,26 @@ if (!userInfo) {
          <table className='mypage-tb'>
           <thead>
             <tr>
-          <th>{userInfo.loginId}</th>
-          <th>{userInfo.grade}</th>
+          <th className='th-Id'>{userInfo.loginId}</th>
+          <th className='th-grade'>{userInfo.grade}</th>
           </tr>
           </thead>
         </table>
-       <div className='update-section'>
         <h3 className='update-headline'>회원정보 수정</h3>
-        <label>이름 변경</label>
-        <input value={userInfo.name}/>
-        <label>연락처 변경</label>
-        <input value={userInfo.phone}/>
-        <button>이메일 인증으로 정보 수정</button>
-        <button>비밀번호 재설정</button>
-        <label>새비밀번호</label>
-        <input placeholder='새 비밀번호입력' />
-        <label>새비밀번호 확인</label>
-        <input placeholder='새 비밀번호 확인' />
-        <button>등록완료</button>
+       <div className='update-section'>
+         
+        <label>이름 변경<input className='input-section' value={userInfo.name}/></label>
+        <label>연락처 변경<input className='input-section' value={userInfo.phone}/></label>
+        <button className='submit-login-btn'>비밀번호 인증으로 수정</button>
+        <label>현재 비밀번호 <input className='input-section' placeholder='새 비밀번호입력' /></label>
+        <label>새비밀번호 <input className='input-section' placeholder='새 비밀번호입력' /></label>
+        <label>새비밀번호 확인 <input className='input-section' placeholder='새 비밀번호 확인' /></label> 
+        <button className='submit-login-btn'>비밀번호 변경</button>
         </div>
-        <span>탈퇴하기</span>
+        <Link className='del-account'>탈퇴하기</Link>
+        </div> 
        </div>
-      </div>
+    
   );
 };
 

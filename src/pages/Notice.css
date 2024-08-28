@@ -29,8 +29,12 @@
 
 .notice-table th, .notice-table td {
     padding: 8px; /* 셀 안쪽 여백 */
-    text-align: left; /* 텍스트 왼쪽 정렬 (필요에 따라 조정) */
+    text-align: center; /* 텍스트 왼쪽 정렬 (필요에 따라 조정) */
     border-bottom: 2px solid rgba(0, 0, 0, 0.2); /* 연한 테두리 */
+}
+
+.notice-title {
+    width: 55%;
 }
 
 .notice-content {
@@ -40,3 +44,4 @@
     border-bottom: 2px solid rgba(0, 0, 0, 0.2); /* 연한 테두리 */
     background-color: #F2F2F2;
 }
+

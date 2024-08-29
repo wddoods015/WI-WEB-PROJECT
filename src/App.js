@@ -7,6 +7,7 @@ import MainPage from "./pages/MainPage";
 import {PrivateRoute} from './components/PrivateRoute';
 import MyLike from "./pages/MyLike";
 import MyPage from "./pages/MyPage";
+import DelAccount from './pages/DelAccount'
 import ShoppingCart from "./pages/ShoppingCart";
 import Inquiries from "./pages/Inquiries";
 import SignIn from "./pages/SignIn";
@@ -21,6 +22,7 @@ import Notice from "./pages/Notice";
 
 
 
+
 // <Route path="/MyPage" element={<PrivateRoute element={<MyPage />} />} />
 const App = () => {
   return (    
@@ -31,7 +33,8 @@ const App = () => {
       <Routes>
         <Route path="/" element={<MainPage />} />
         <Route path="/MyLike" element={<PrivateRoute element={<MyLike />} />} />
-        <Route path="/MyPage" element={<MyPage/>} />
+        <Route path="/MyPage" element={<PrivateRoute element={<MyPage />} />} />
+        <Route path="/MyPage/DelAccount" element={<DelAccount/>} />
         <Route path="/MyPage/Inquiries" element={<Inquiries />} /> 
         <Route path="/MyPage/Notice" element={<Notice />} /> 
         <Route path="/ShoppingCart" element={<PrivateRoute element={<ShoppingCart />} />}  />

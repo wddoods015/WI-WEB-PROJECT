@@ -19,6 +19,8 @@ import './App.css';
 
 // 추가
 import Notice from "./pages/Notice";
+import {MyOrder} from "./pages/MyOrder";
+import MyOrderDetail from "./pages/MyOrderDetail";
 
 
 
@@ -37,6 +39,8 @@ const App = () => {
         <Route path="/MyPage/DelAccount" element={<DelAccount/>} />
         <Route path="/MyPage/Inquiries" element={<Inquiries />} /> 
         <Route path="/MyPage/Notice" element={<Notice />} /> 
+        <Route path="/MyPage/MyOrder" element={<MyOrder />} />
+        <Route path="/MyPage/MyOrder/MyOrderDetail/:orderid" element={<MyOrderDetail />} />
         <Route path="/ShoppingCart" element={<PrivateRoute element={<ShoppingCart />} />}  />
         <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} /> 
@@ -47,7 +51,6 @@ const App = () => {
       </div>
     </div>
   </Router>
-  
   );
 };
 

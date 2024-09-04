@@ -36,9 +36,9 @@ const response = await axios.post(
     headers: { "Content-Type": "application/json" },
   }
 );
-console.log(response);
-console.log(response.data);
-console.log(response.data.data); // 받은 토큰이 {date: token} 형식임..
+//console.log(response);
+//console.log(response.data);
+//console.log(response.data.data); // 받은 토큰이 {date: token} 형식임..
 // axios 응답에서 데이터 가져오기
 
  if (response.data.data !== null) {
@@ -47,7 +47,9 @@ console.log(response.data.data); // 받은 토큰이 {date: token} 형식임..
      sessionStorage.setItem("accessToken", response.data.data);
      console.log("id:  " + id);
      console.log("response.data.data:  " + response.data.data);
-
+     alert(
+      "로그인되었습니다."
+    );
 
 // 로그인 승인되면 메인으로 이동 - 이코드 주석 달거나 설명 글 쓰기,,
         window.location.replace("/");

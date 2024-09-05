@@ -26,12 +26,10 @@ const [chkPw, setChkPw] = useState('');
 
 useEffect(() => {
   
-
   const getUser = async () => {
     try {
       const response = await axios.get(`http://43.203.208.22:3000/api/users/${loginId}`, {
-        headers: { Authorization: sessionStorage.getItem('accessToken'),
-        },
+        headers: { Authorization: sessionStorage.getItem('accessToken'),},
       }); 
      
       if (response.data && response.data.data) {
@@ -109,7 +107,7 @@ const UpdatePw = () => {
 };
 
 const HandleAlert = () => {
-  alert('계정을 삭제하면 보유하신 마일리지는 전부 삭제됩니다. 그래도 탈퇴하시겠습니까?');
+  alert(userInfo.name+'님, 계정을 삭제하면 보유하신 마일리지는 전부 삭제됩니다. 그래도 탈퇴하시겠습니까?');
 }
 
   return (

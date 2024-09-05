@@ -1,23 +1,30 @@
 // 회원탈퇴 페이지 컴포넌트
-import React, {useState} from "react";
+//import React, {useState} from "react";
 import './DelAccount.css';
 import axios from "axios";
 
 
 const DelAccount = () => {
-    const [status, setStatus] = useState('');
+   // const [status, setStatus] = useState('');
     
    
     const handleDelAccount = async () => {
-        setStatus('inactive');
+       
+        const loginId = sessionStorage.getItem('id'); 
         try {
-            const id = sessionStorage.getItem('id') 
-            const response = await axios.put(`http://43.203.208.22:3000/api/users/${id}`,{
-                status: status
-            }, {headers: { "Content-Type": "application/json" }})
-              console.log(response);
+            
+            const response = await axios.delete(`http://43.203.208.22:3000/api/users/${loginId}`);
+              console.log(response.httpStatus);
+
+                if(response.httpStatus.ok) {
+                    alert('정상적으로 회원탈퇴 되었습니다.');
+                    window.location.replace("/");
+                } else {
+                  console.error();  
+                }
+
         } catch (error) {
-            console.log('계정삭제 에러: ', error);
+            console.log('계정삭제 에러: ', error.message);
         }
     };
     

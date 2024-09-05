@@ -1,14 +1,12 @@
 import React from 'react';
-//import axios from 'axios';
 import Sidebar from '../components/Sidebar';
-//import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query'; 
 import { fetchData } from './MyOrder'; // 리액트쿼리로 api요청해서 받아온 데이터 가져오기
 import './MyOrder.css';
 
 
 const MyOrderDetail = () => {
-    //const { orderid } = useParams(); // URL 파라미터에서 orderid 추출
+    
     const { data } = useQuery({
         queryKey: ['order'],
         queryFn: fetchData

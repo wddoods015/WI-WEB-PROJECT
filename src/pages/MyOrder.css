@@ -22,6 +22,7 @@
     width: 80%;
     display: flex;
     justify-content: space-between; /* 자식 요소들 사이의 간격을 동일하게 */
+    font-weight: 900; /*제목 폰트 굵게*/
 }
 .th-img {
     width: 15%;
@@ -31,12 +32,10 @@
     width: 35%;
 }
 
-.th-deliveryFee {
-    width: 20%;
-}
+
 
 .th-status {
-    width: 20%;
+    width: 30%;
 
 }
 
@@ -63,19 +62,17 @@
 }
 
 .myorder-itemimg {
-    width: 15%;
+    width: 20%;
 }
 
 .myorder-item {
-    width: 32%;
+    width: 40%;
 }
 
-.myorder-deliveryFee {
-    width: 15%;
-}
+
 
 .myorder-status {
-    width: 20%;
+    width: 30%;
 }
 
 .myorder-link {
@@ -86,6 +83,8 @@
     color: inherit; 
     width: 100%;       /* 부모 요소의 색상 사용 */
 }
+
+
 
 /*------------------------주문배송조회 상세페이지 영역--------------------------------*/
 

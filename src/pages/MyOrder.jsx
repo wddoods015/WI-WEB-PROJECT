@@ -27,7 +27,8 @@ const MyOrder = () => {
    
     const { data, isLoading, error } = useQuery({
         queryKey: ['order'],
-        queryFn: fetchData
+        queryFn: fetchData,
+        staleTime: 1000 * 60 * 5, // 캐시 시간 설정
       });
    //console.log('data:',data);
 
@@ -46,7 +47,8 @@ const MyOrder = () => {
                     <span className='th-status'>진행상태</span>
                     <span>구매확정 및 리뷰</span>
                 </div>   
-            {data && data.map((order, index) => (
+                {Array.isArray(data) && data.length > 0 ? (
+            data && data.map((order, index) => (
              <Link className='myorder-link' to={`/MyPage/MyOrder/MyOrderDetail/${order.orderId}`} >
    <div className='myorder-list'>
    <div className='myorder-date' key={index}>
@@ -63,16 +65,22 @@ const MyOrder = () => {
    </ul>
   
    <ul className='myorder-status'>{order.status}</ul>
-   <ul className='myorder-status'>{order.status === '준비중' ? (
-        <ul><button>취소접수</button></ul>
-      ) : order.status === 'done' ? (
-        <ul><button>Review 버튼</button></ul>
+   <ul className='myorder-status'>{order.status === '결제완료' ? (
+        <ul><button >취소접수</button></ul>
+      ) : order.status === '배송완료' ? (
+        <ul>
+            <button >반품접수</button>
+        </ul>
       ) : null}</ul>
 </li>
 )}  
         </div>
         </Link>
-            ))}
+            ))
+        
+        ):(
+            <div className='myorder-list'>주문내역이 없습니다.</div>
+        )}
             </div>
         </div>
     );

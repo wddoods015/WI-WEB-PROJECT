@@ -1,25 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // QueryClient와 QueryClientProvider 가져오기
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-import App from './App';
+//import './index.css';
+//import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-// QueryClient 인스턴스 생성
-const queryClient = new QueryClient();
 
-// ReactDOM.render 호출
+import App from './App'
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
-
-// App 컴포넌트를 QueryClientProvider로 감싸기
 root.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
-  </React.StrictMode>
+    <App />
+    </React.StrictMode>
 );
 
-// 성능 측정을 시작하려면 reportWebVitals를 호출합니다.
+// If you want to start measuring performance in your app, pass a function
+// to log results (for example: reportWebVitals(console.log))
+// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();

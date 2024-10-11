@@ -1,19 +1,21 @@
 // 회원탈퇴 페이지 컴포넌트
-//import React, {useState} from "react";
+import React from "react";
 import './DelAccount.css';
 import axios from "axios";
 
 
 const DelAccount = () => {
-   // const [status, setStatus] = useState('');
+ 
     
    
     const handleDelAccount = async () => {
-       
+        const API_URL = process.env.REACT_APP_API_URL;
         const loginId = sessionStorage.getItem('id'); 
         try {
             
-            const response = await axios.delete(`http://43.203.208.22:3000/api/users/${loginId}`);
+            const response = await axios.delete(`${API_URL}/api/users/${loginId}`,{},
+            {withCredentials: true, // 쿠키를 포함하여 요청  
+        });
               console.log(response.httpStatus);
 
                 if(response.httpStatus.ok) {

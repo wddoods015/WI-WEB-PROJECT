@@ -1,29 +1,35 @@
 /* 
 src/App.jsx
 실제 렌더링 되는 App.js
-[ ] 상품 상세 ProductDetail.jsx 작성 예정
 */
 
 import React from "react";
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NavBar from "./components/Layout/NavBar";
 import Footer from "./components/Footer";
 import MainPage from "./pages/MainPage";
 import {PrivateRoute} from './components/PrivateRoute';
 import MyLike from "./pages/MyLike";
 import MyPage from "./pages/MyPage";
-import ShoppingCart from "./pages/ShoppingCart";
+import DelAccount from './pages/DelAccount'
 import Inquiries from "./pages/Inquiries";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ProductList from "./components/ProductList";
 import ProductDetail from "./pages/ProductDetail";
+import ShoppingCart from "./pages/ShoppingCart";
+import Checkout from "./pages/Checkout";
 
 import 'bootstrap/dist/css/bootstrap.min.css'; // 부트스트랩 설치
 import './App.css';
 
 
-
+// 추가
+import Notice from "./pages/Notice";
+import MyOrder from "./pages/MyOrder";
+import MyOrderDetail from "./pages/MyOrderDetail";
+import CancelList from "./pages/CancelList";
+import Review from "./pages/Review";
 
 const App = () => {
   return (    
@@ -32,16 +38,27 @@ const App = () => {
       <div className="landing-page">
         <NavBar />
         <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/MyLike" element={<PrivateRoute element={<MyLike />} />} />
-          <Route path="/MyPage" element={<PrivateRoute element={<MyPage />} />} />
-          <Route path="/MyPage/Inquiries" element={<Inquiries />} /> 
-          <Route path="/ShoppingCart" element={<PrivateRoute element={<ShoppingCart />} />}  />
-          <Route path="/SignIn" element={<SignIn />} />
-          <Route path="/SignUp" element={<SignUp />} /> 
-          <Route path="/categories/:category" element={<ProductList/>} />
-          <Route path="/categories/:category/:item" element={<ProductList />} />
-          <Route path="/products/:productId" element={<ProductDetail />} />
+        <Route path="/" element={<MainPage />} />
+        <Route path="/ShoppingCart" element={<ShoppingCart />} />
+
+        <Route path="/MyLike" element={<PrivateRoute element={<MyLike />} />} />
+        <Route path="/MyPage" element={<PrivateRoute element={<MyPage />} />} />
+        <Route path="/MyPage/DelAccount" element={<DelAccount/>} />
+        <Route path="/MyPage/Inquiries" element={<Inquiries />} /> 
+        <Route path="/MyPage/Notice" element={<Notice />} /> 
+        <Route path="/MyPage/MyOrder" element={<MyOrder />} />
+        <Route path="/MyPage/MyOrder/MyOrderDetail/:orderid" element={<MyOrderDetail />} />
+        <Route path="/MyPage/CancelList" element={<CancelList />} />
+        <Route path="/MyPage/Review" element={<Review />} />
+        {/* jy */}
+
+        <Route path="/ShoppingCart" element={<PrivateRoute element={<ShoppingCart />} />}  />
+        <Route path="/SignIn" element={<SignIn />} />
+        <Route path="/SignUp" element={<SignUp />} /> 
+        <Route path="/categories/:category" element={<ProductList/>} />
+        <Route path="/categories/:category/:item" element={<ProductList />} />
+        <Route path="/products/:productId" element={<ProductDetail />} />
+        <Route path="/Checkout" element={<Checkout />} />
         </Routes>
         <Footer />
         </div>

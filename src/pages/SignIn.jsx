@@ -8,10 +8,12 @@ import { Link } from 'react-router-dom';
 
 
 
+
 const SignIn = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [id, setId] = useState(''); // 이메일 입력값을 저장할 상태
   const [password, setPassword] = useState(''); // 비밀번호 입력값을 저장할 상태
-  
+ 
   
   const idChange = (event) => {
     setId(event.target.value);
@@ -30,10 +32,13 @@ const SignIn = () => {
 // post로 요청보내기
 try {
 const response = await axios.post(
-  'http://43.203.208.22:3000/api/users/login',
+  `${API_URL}/api/users/login`,
   body,
   {
-    headers: { "Content-Type": "application/json" },
+    withCredentials: true,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   }
 );
 //console.log(response);

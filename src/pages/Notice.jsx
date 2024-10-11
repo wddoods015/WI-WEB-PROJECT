@@ -6,15 +6,15 @@ import './Notice.css';
 
 
 const Notice = () => {
-    //const [rowOpen, setRowOpen] = useState(false);
     const [expandedNoticeId, setExpandedNoticeId] = useState(null);
+    const API_URL = process.env.REACT_APP_API_URL;
     const [notice, setNotice] = useState([]);
     
    
 
     useEffect (() => {
         const getNotice = async () => {
-                await axios.get('http://43.203.208.22:3000/api/boards')
+                await axios.get(`${API_URL}/api/boards`)
                 .then(response => {
                     console.log(response.data);
                     setNotice(response.data.data);

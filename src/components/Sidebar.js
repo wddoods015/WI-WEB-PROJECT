@@ -12,10 +12,10 @@ const Sidebar = () => {
                 <Link to="/MyPage/MyOrder">주문배송조희</Link>
                 </li>
                 <li>
-                <Link to="/">취소/교환/반품 내역</Link>
+                <Link to="/MyPage/CancelList">취소/교환/반품 내역</Link>
                 </li>  
                 <li>
-                <Link to="/">상품 리뷰</Link>
+                <Link to="/MyPage/Review">상품 리뷰</Link>
                 </li>  
                 <li>
                 <Link to="/MyPage/Inquiries">1:1 문의내역</Link>

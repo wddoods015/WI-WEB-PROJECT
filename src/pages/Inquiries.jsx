@@ -8,6 +8,8 @@ import './Inquiries.css';
 
 
 const Inquiries = () => {
+    const API_URL = process.env.REACT_APP_API_URL;
+    const [error, setError] = useState(null);
     const [open, setOpen] = useState(false); // 모달창 오픈 상태
     const [expandedInquiryId, setExpandedInquiryId] = useState(null);
     const [inquiries, setInquiries] = useState([]); // 문의내역을 저장할 상태
@@ -20,17 +22,47 @@ const Inquiries = () => {
 
   
     useEffect(() => {
+      
         const getInquiries = async () => {
+          
             try {
-                const response = await axios.get(`http://43.203.208.22:3000/api/productInquiries/${inquiryId}`);
-                console.log(response.data.data);
+                const response = await axios.get(`${API_URL}/api/productInquiries/all/${loginId}`, {
+                  withCredentials: true // 쿠키를 포함하여 요청  
+                });
+
+                console.log(2);
                  // 받은 데이터를 사용하려면 여기에 추가
                  setInquiries(response.data.data);    
             } 
             catch (error) {
-                console.error('Error getting inquiries:', error);
+                console.log(' catch Error getting inquiries:', error);
+                // 401 토큰 만료일 때 
+                if (error.response.status === 401){
+                  try {
+                    axios.get(`${API_URL}/api/auth/refreshToken`, {
+                      withCredentials: true
+                    }).then(async () => {
+                      
+                     const response = await axios.get(`${API_URL}/api/productInquiries/all/${loginId}`, {
+                      withCredentials: true // 쿠키를 포함하여 요청   
+                      }); 
+
+                      if (response.data && response.data.data) {
+                        setInquiries(response.data.data);   
+                        console.log(inquiries);
+                      } else {
+                        setError("No data found"); // 데이터가 없을 때 에러 메시지 설정
+                      }
+                });
+
+            } catch (error) {
+              // 리프레시 토큰을 가져오지 못할 때
+              console.error("Error : refreshToken expired", error);
             }
-        };
+          }
+          setError(error.message); // API 호출 실패 시 에러 메시지 설정
+        }
+      };
         getInquiries(); // 함수 호출
     }, []); // 빈 배열로 의존성 설정
 
@@ -62,47 +94,122 @@ const Inquiries = () => {
     }
 
    // 문의 데이터 post 하기
-    const handleSubmit = async (e) => { 
-        e.preventDefault();
-        try {
-            const Post = await axios.post(
-                'http://43.203.208.22:3000/api/productInquiries', // URL
-                body,         // 요청 본문
-                { headers: { 'Content-Type': 'application/json' } } // 요청 설정
-            );
-            
-            // if(){
-            //   resPost = await axios.get(`http://43.203.208.22:3000/api/productInquiries`);
-            //   console.log(resPost);
-            //   setInquiries(resPost.data.data);
-            // } 
-
-      setProductID(''); // POST 후 입력 필드를 초기화
-      setInquiryTitle('');
-      setUserComment('');
-      setOpen(false); // 모달 닫기
-      alert('등록 완료');
-        } catch (error) {
-            // 오류 처리
-            console.error('Error posting inquiry:', error);
-            alert('등록 오류입니다.');
-        }
-    };
-
-    const handleDelete = async (inquiryId) => {
-        try{
-           const Delete = await axios.delete(`http://43.203.208.22:3000/api/productInquiries/${inquiryId}`);
-       
-            if(Delete.data.data.ok){
-               const resDelete = await axios.get(`http://43.203.208.22:3000/api/productInquiries`);
-              setInquiries(resDelete.data.data);
-              alert('정상적으로 삭제 되었습니다.');
+   const handleSubmit = async (e) => { 
+    e.preventDefault();
+    try {
+        const Post = await axios.post(
+            `${API_URL}/api/productInquiries/`, // URL
+            body, 
+            {
+                withCredentials: true
             }
-          
-        } catch (error) {
-            console.error('Error deleting inquiry:', error);
+        );
+
+        if (Post.data.message === 'Completed: newProductInquiry are Created') {
+            const resPost = await axios.get(`${API_URL}/api/productInquiries/all/${loginId}`, {
+                withCredentials: true // 쿠키를 포함하여 요청  
+            });
+            console.log('POST', resPost);
+            setInquiries(resPost.data.data);
+        }
+
+        setProductID(''); // POST 후 입력 필드를 초기화
+        setInquiryTitle('');
+        setUserComment('');
+        setOpen(false); // 모달 닫기
+        alert('등록 완료');
+
+    } catch (error) {
+        if (error.response && error.response.status === 401) {
+            try {
+                // 리프레시 토큰 요청
+                await axios.get(`${API_URL}/api/auth/refreshToken`, {
+                    withCredentials: true
+                });
+
+                // 원래의 POST 요청 다시 실행
+                const Post = await axios.post(
+                    `${API_URL}/api/productInquiries/`, // URL
+                    body, 
+                    {
+                        withCredentials: true
+                    }
+                );
+
+                if (Post.data.message === 'Completed: newProductInquiry are Created') {
+                    const resPost = await axios.get(`${API_URL}/api/productInquiries/all/${loginId}`, {
+                        withCredentials: true // 쿠키를 포함하여 요청  
+                    });
+                    console.log('POST', resPost);
+                    setInquiries(resPost.data.data);
+                }
+
+                setProductID(''); // POST 후 입력 필드를 초기화
+                setInquiryTitle('');
+                setUserComment('');
+                setOpen(false); // 모달 닫기
+                alert('등록 완료');
+
+            } catch (refreshError) {
+                console.error("Error : refreshToken expired", refreshError);
+            }
+        } else {
+            console.error("Error during POST request:", error);
+            // 추가적인 오류 처리를 여기서 수행할 수 있습니다.
         }
     }
+};
+
+
+
+const handleDelete = async (inquiryId) => {
+  try {
+      const Delete = await axios.delete(`${API_URL}/api/productInquiries/${inquiryId}`, {
+          withCredentials: true
+      });
+
+      if (Delete.data.data.ok) {
+          const resDelete = await axios.get(`${API_URL}/api/productInquiries/all/${loginId}`, {
+              withCredentials: true // 쿠키를 포함하여 요청  
+          });
+
+          setInquiries(resDelete.data.data);
+          alert('정상적으로 삭제 되었습니다.');
+      }
+
+  } catch (error) {
+      // error.response로 접근
+      if (error.response && error.response.status === 401) {
+          try {
+              // 리프레시 토큰 요청
+              await axios.get(`${API_URL}/api/auth/refreshToken`, {
+                  withCredentials: true
+              });
+
+              // 리프레시 토큰 후 다시 DELETE 요청
+              const Delete = await axios.delete(`${API_URL}/api/productInquiries/${inquiryId}`, {
+                  withCredentials: true
+              });
+
+              if (Delete.data.data.ok) {
+                  const resDelete = await axios.get(`${API_URL}/api/productInquiries/all/${loginId}`, {
+                      withCredentials: true // 쿠키를 포함하여 요청  
+                  });
+
+                  setInquiries(resDelete.data.data);
+                  alert('정상적으로 삭제 되었습니다.');
+              }
+
+          } catch (refreshError) {
+              console.error("Error : refreshToken expired", refreshError);
+          }
+      } else {
+          console.error("Error during DELETE request:", error);
+          // 추가적인 오류 처리를 여기서 수행할 수 있습니다.
+      }
+  }
+};
+    
 
    
 

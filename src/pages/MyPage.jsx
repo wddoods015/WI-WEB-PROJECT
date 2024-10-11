@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 
 
 const MyPage = () => {
+  const API_URL = process.env.REACT_APP_API_URL;
   const [userInfo, setUserInfo] = useState(null);
   const [error, setError] = useState(null);
   const loginId = sessionStorage.getItem('id'); 
@@ -23,34 +24,62 @@ const MyPage = () => {
 
 const [chkPw, setChkPw] = useState('');
   
-
 useEffect(() => {
-  
+
   const getUser = async () => {
     try {
-      const response = await axios.get(`http://43.203.208.22:3000/api/users/${loginId}`, {
-        headers: { Authorization: sessionStorage.getItem('accessToken'),},
+  
+      const response = await axios.get(`${API_URL}/api/users/${loginId}`, {
+        withCredentials: true // 쿠키를 포함하여 요청   
       }); 
      
       if (response.data && response.data.data) {
+        console.log(response);
         const { name, loginId, grade, phone } = response.data.data;
         setUserInfo({ name, loginId, grade, phone }); // 사용자 정보 상태 업데이트
+       
       } else {
         setError("No data found"); // 데이터가 없을 때 에러 메시지 설정
       }
+  
     } catch (error) {
+      // 리프레쉬 토큰 요청
+     
+      if (error.response.status === 401){
+        
+        try {
+          axios.get(`${API_URL}/api/auth/refreshToken`, {
+            withCredentials: true
+          }).then(async () => {
+            
+            const response = await axios.get(`${API_URL}/api/users/${loginId}`, {
+            withCredentials: true // 쿠키를 포함하여 요청   
+            }); 
+          //결과 데이터 처리 반복
+         
+            if (response.data && response.data.data) {
+              
+              const { name, loginId, grade, phone } = response.data.data;
+              setUserInfo({ name, loginId, grade, phone }); // 사용자 정보 상태 업데이트
+              
+              console.log(userInfo);
+            } else {
+              
+              setError("No data found"); // 데이터가 없을 때 에러 메시지 설정
+            }
+          });
+  
+        } catch (error) {
+          console.error("Error : refreshToken expired", error);
+        }  
+      }
       setError(error.message); // API 호출 실패 시 에러 메시지 설정
     }
   };
 
   getUser(); // getUser 함수 호출
-}, []); // 빈 배열을 의존성 배열로 사용하여 컴포넌트 마운트 시 한 번만 호출됨
+}, []); 
 
-if (error) {
-  return <div>Error: {error}</div>; // 에러가 발생한 경우 화면에 에러 메시지 표시
-}
-
-// userInfo가 null일 때는 로딩 메시지를 표시
 if (!userInfo) {
   return <div>Loading...</div>;
 }
@@ -59,10 +88,12 @@ if (!userInfo) {
 const userInfoChange = (e) => {
   const { name, value } = e.target;
   setChangeInfo({
-    ...userInfo,
+    ...changeInfo,
     [name]: value,
   });
 };
+
+console.log('changeInfo:',changeInfo);
 
 // 업데이트할 사용자 비밀번호 onChange 핸들러
 const passwordChange = (e) => {
@@ -70,6 +101,7 @@ const passwordChange = (e) => {
   setChangePw({
     ...changePw,
     [name]: value,
+    loginId:loginId,
   });
 }
 
@@ -77,22 +109,50 @@ const chkpwChange = (e) => {
   setChkPw(e.target.value);
 }
 
-// 개인정보 update submit 
-//put 오류 - 404 api 문제인가
-const UpdateInfo = () => {
-  axios.put(`http://43.203.208.22:3000/api/user${loginId}`, {userInfo})
-  .then(response => {
-    console.log(response.data);
-    alert('정보가 정상적으로 변경되었습니다.')
-  }).catch(error => error.message)
-  console.log('put error: ',error); 
-  alert('비밀번호가 일치하지 않습니다.');
-};
+//------------------------------- 개인정보 update submit ------------------------------------
 
 
-const UpdatePw = () => {
+const UpdateInfo = async () => {
+  let response;
+  try {
+    let response = axios.put(`${API_URL}/api/user${loginId}`,
+      changeInfo, 
+      {withCredentials: true,});
+
+      if (response.data && response.data.data) {
+          console.log('catch 응답:',response.data.data);
+    } else {
+        console.log('No data found');
+    }
+  } catch (error) {
+    if (error.response && error.statusCode === 401) {
+    // Refresh token 요청
+   try{
+    const newAccessToken = await refreshToken();
+
+    response = await axios.put(`${API_URL}/api/user${loginId}`,
+      changeInfo, 
+      {
+        headers: {
+            Authorization: `Bearer ${newAccessToken}`,  // 새로운 토큰으로 인증 헤더 설정
+        },withCredentials: true,});
+        console.log('catch 응답2:',response.data);
+   }  catch (refreshError) {
+    console.error('Refresh token error', refreshError);
+   
+    // 사용자가 로그인 페이지로 리디렉션하거나 경고를 표시할 수 있습니다.
+}
+    } else {
+      console.error('Fetch error', error);
+    }
+  }};
+
+
+const UpdatePw = async () => {
   if (chkPw === changePw.newpassword) {
-    axios.put(`http://43.203.208.22:3000/api/user${loginId}`, changePw)
+
+    
+      let response = axios.put(`${API_URL}/api/user${loginId}`, changePw)
       .then(response => {
         console.log(response.data);
         alert('정보가 정상적으로 변경되었습니다.');
@@ -101,8 +161,25 @@ const UpdatePw = () => {
         console.log('put error: ', error); 
         alert('비밀번호 변경 중 오류가 발생했습니다.');
       });
+  
+    
   } else {
     alert('새비밀번호가 일치하지 않습니다.');
+  }
+};
+
+ // 리프레시 토큰 요청하는 함수 - 재사용을 위해 분리,,
+ const refreshToken = async () => {
+  try {
+      const response = await axios.get(`${API_URL}/api/auth/refreshToken`, {
+          withCredentials: true,
+      });
+      console.log('Refresh token response:', response.data);
+      // 액세스 토큰 갱신이 성공하면, 해당 액세스 토큰을 사용할 수 있도록 처리
+      return response.data.accessToken;  // 새로 발급받은 액세스 토큰 반환
+  } catch (error) {
+      console.error('Error refreshing token:', error);
+      throw new Error("Failed to refresh token");
   }
 };
 

@@ -49,15 +49,21 @@
 }
 
 .review-div-1 {
-    width: 50%;
-}
-
-.review-div-2 {
     width: 30%;
 }
 
+/*-----review item image-----------*/
+.review-image {
+    width: 100px;
+    height: auto;
+}
+
+.review-div-2 {
+    width: 55%;
+}
+
 .review-div-3 {
-    width: 20%;
+    width: 15%;
 }
 
 /*---------modal section-------------------*/
@@ -96,4 +102,40 @@
     color: #333;
     background-color: white;
     border: solid 1px #ccc;
+}
+
+
+/*---------review modal------------------------------*/
+.review-x-btn {
+width: 35px;
+height: 40px;
+}
+
+.item-div {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    border-bottom: solid 1px #333;
+    height: auto;
+}
+
+.rate-div {
+    width: 100%;
+    margin-bottom: 40px;
+    display: flex;
+    gap: 30px;
+}
+
+.rate-select {
+    width: 50%;
+}
+
+.txtarea-div {
+    height: 200px;
+}
+
+.review-txtarea {
+    width: 100%;
+    height: 80%;
+    resize: none;
 }

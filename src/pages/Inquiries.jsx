@@ -243,7 +243,7 @@ const handleDelete = async (inquiryId) => {
                             <option value="" selected disabled hidden>문의 카테고리 선택</option>
                             <option value="구매관련문의">구매관련문의</option>
                             <option value="일반상담문의">일반상담문의</option>
-                            <option value="기타문의">기타문의</option>
+                            <option value="기타문의">기타문의</option
                             </select>
                             <label>주문 번호</label>
                             <input className='qna-title' name="productID" value={productID} onChange={productIDOnChange} placeholder='주문번호를 입력하세요.'></input>
